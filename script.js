@@ -15,6 +15,8 @@ async function validateForm(event) {
     const fullName = document.getElementById('full_name').value;
     const phoneNumber = document.getElementById('phone_number').value;
     const attendanceDate = document.getElementById('attendance_date').value;
+    const submitButton = document.querySelector('#registrationForm button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
 
     // Validate date is not in the past
     const selectedDate = new Date(attendanceDate);
@@ -26,8 +28,12 @@ async function validateForm(event) {
         return false;
     }
 
+    // Show loading state
+    submitButton.disabled = true;
+    submitButton.textContent = 'Loading...';
+
     try {
-        console.log('Submitting registration:', { fullName, phoneNumber, attendanceDate }); // Debug log
+        console.log('Submitting registration:', { full_name: fullName, phone_number: phoneNumber, attendance_date: attendanceDate });
 
         const response = await fetch(`${config.apiUrl}/register`, {
             method: 'POST',
@@ -41,10 +47,17 @@ async function validateForm(event) {
             })
         });
 
-        const result = await response.json();
+        let result;
+        try {
+            result = await response.json();
+        } catch (jsonError) {
+            console.error('Failed to parse JSON response:', jsonError);
+            alert('Registration failed: Invalid server response.');
+            return false;
+        }
         console.log('Server response:', result); // Debug log
         
-        if (result.success) {
+        if (response.ok && result.success) {
             alert('Registration successful!');
             document.getElementById('registrationForm').reset();
             // Reset min date to today
@@ -56,6 +69,10 @@ async function validateForm(event) {
     } catch (error) {
         console.error('Error submitting registration:', error);
         alert('Registration failed. Please try again.');
+    } finally {
+        // Restore button state
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
     }
     
     return false;
