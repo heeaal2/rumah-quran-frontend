@@ -4,6 +4,9 @@ import config from './config.js';
 document.addEventListener('DOMContentLoaded', () => {
     const dateInput = document.getElementById('attendance_date');
     dateInput.min = new Date().toISOString().split('T')[0];
+
+    // Attach the submit event handler here
+    document.getElementById('registrationForm').addEventListener('submit', validateForm);
 });
 
 async function validateForm(event) {
