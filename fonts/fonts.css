@@ -41,8 +41,8 @@
 @font-face {
     font-family: 'ZT Formom';
     src: url('../font/zt-formom.woff') format('woff'),
-         url('../font/zt-formom.otf') format('opentype'),
-         url('../font/zt-formom.ttf') format('truetype');
+         url('../font/zt-formom.otf') format('otf'),
+         url('../font/zt-formom.ttf') format('ttf');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
